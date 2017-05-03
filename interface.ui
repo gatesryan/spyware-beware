@@ -1,0 +1,49 @@
+<interface>
+  <object id="window" class="GtkWindow">
+    <property name="visible">True</property>
+    <property name="title">Spyware Beware</property>
+    <property name="border-width">10</property>
+    <property name="default-height">500</property>
+    <property name="default-width">500</property>
+    <child>
+      <object id="box" class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
+        <!-- <property name="spacing">30</property> -->
+        <child>
+            <object id="button1" class="GtkButton">
+                <property name="visible">True</property>
+                <property name="label">Start Monitoring</property>
+            </object>
+            <packing>
+            </packing>
+        </child>
+
+        <child>
+            <object id="output" class="GtkTextView">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="editable">False</property>
+            </object>
+            <packing>
+            </packing>
+        </child>
+        <child>
+            <object id="status" class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label">No Spyware Detected</property>
+                <attributes>
+                    <!-- <attribute name="background" value="green" start="0" end="19"/> -->
+                    <attribute name="size" value="25000"/>
+                </attributes>
+            </object>
+            <packing>
+                <property name="padding">30</property>
+            </packing>
+        </child>
+      </object>
+      <packing>
+      </packing>
+    </child>
+  </object>
+</interface>
