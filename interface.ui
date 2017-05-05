@@ -10,23 +10,69 @@
         <property name="visible">True</property>
         <property name="orientation">GTK_ORIENTATION_VERTICAL</property>
         <!-- <property name="spacing">30</property> -->
+
         <child>
-            <object id="button1" class="GtkButton">
+            <object id="grid" class="GtkGrid">
                 <property name="visible">True</property>
-                <property name="label">Start Monitoring</property>
+                <property name="column-spacing">70</property>
+                <property name="hexpand">True</property>
+                <child>
+                    <object id="port_entry" class="GtkEntry">
+                        <property name="visible">True</property>
+                    </object>
+                    <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top-attach">1</property>
+                    </packing>
+                </child>
+                <child>
+                    <object id="port_label" class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="label">Enter Port Number</property>
+                    </object>
+                    <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top-attach">0</property>
+                    </packing>
+                </child>
+                <child>
+                    <object id="button1" class="GtkButton">
+                        <property name="visible">True</property>
+                        <property name="label">Start Monitoring Port</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                    </packing>
+                </child>
+                <child>
+                    <object id="whole_network_monitor" class="GtkButton">
+                        <property name="visible">True</property>
+                        <property name="label">Full Network Monitoring</property>
+                    </object>
+                    <packing>
+                        <property name="left-attach">8</property>
+                        <property name="top-attach">3</property>
+                    </packing>
+                </child>
             </object>
-            <packing>
-            </packing>
+
         </child>
 
         <child>
-            <object id="output" class="GtkTextView">
+            <object id="output_pane" class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="expand">True</property>
-                <property name="editable">False</property>
+                <child>
+                    <object id="output" class="GtkTextView">
+                        <property name="visible">True</property>
+                        <property name="expand">True</property>
+                        <property name="editable">False</property>
+                    </object>
+                </child>
             </object>
-            <packing>
-            </packing>
+
+
         </child>
         <child>
             <object id="status" class="GtkLabel">
