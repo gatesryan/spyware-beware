@@ -8,8 +8,10 @@
 #include "helpers.h"
 #include <glib.h>
 
-void start_stop_monitoring_thread();
-void * monitor_wrapper(void * args);
+void start_stop_monitoring_thread(GtkWidget *widget, gpointer data);
+void * monitor_wrapper(void * arg);
+void start_stop_whole_net_monitoring_thread(GtkWidget *widget, gpointer data);
+void * whole_net_monitor_wrapper(void * arg);
 
 
 GtkBuilder *builder;
@@ -18,6 +20,7 @@ GObject *button;
 GObject *textview;
 GObject *label;
 GObject *port_entry;
+GObject *whole_net_button;
 
 pthread_t monitor_thread;
 
@@ -50,6 +53,9 @@ int main(int argc, char **argv)
     label = gtk_builder_get_object(builder, "status");
 
 
+    whole_net_button = gtk_builder_get_object(builder, "whole_network_monitor");
+    g_signal_connect_swapped(whole_net_button, "clicked", G_CALLBACK(start_stop_whole_net_monitoring_thread), text_buffer);
+
     char * output_str_array[65536];
     for (int i = 0; i < 65535; i++){
 
@@ -65,7 +71,6 @@ int main(int argc, char **argv)
     // char * initial_output = join_strings(output_str_array);
     // gtk_text_buffer_set_text(text_buffer, initial_output, -1);
 
-    gdk_threads_add_idle(update_text_view, NULL);
     gtk_main();
 
 
@@ -74,6 +79,8 @@ int main(int argc, char **argv)
 
 void start_stop_monitoring_thread(GtkWidget *widget, gpointer data)
 {
+    gdk_threads_add_idle(update_text_view, NULL);
+
     if (!monitoring){
         // Update label with status of what's happening to user
         gtk_label_set_text(GTK_LABEL(label), "Monitoring Network Traffic...");
@@ -95,6 +102,44 @@ void start_stop_monitoring_thread(GtkWidget *widget, gpointer data)
 
     return;
 }
+
+
+void start_stop_whole_net_monitoring_thread(GtkWidget *widget, gpointer data)
+{
+    gdk_threads_add_idle(update_text_view_full, NULL);
+
+    if (!monitoring){
+        // Update label with status of what's happening to user
+        gtk_label_set_text(GTK_LABEL(label), "Monitoring Network Traffic...");
+        gtk_button_set_label(GTK_BUTTON(whole_net_button), "Stop Monitoring");
+        // void * buffer = (void *) buf;
+
+        pthread_create(&monitor_thread, NULL, whole_net_monitor_wrapper, widget);
+        // pthread_detach(monitor_thread);
+        monitoring = 1;
+    }
+
+    else{
+        gtk_label_set_text(GTK_LABEL(label), "No Spyware Detected");
+        gtk_button_set_label(GTK_BUTTON(whole_net_button), "Start Monitoring");
+
+        pthread_cancel(monitor_thread);
+        monitoring = 0;
+    }
+
+    return;
+}
+
+
+void * whole_net_monitor_wrapper(void * arg)
+{
+    GtkTextBuffer * buffer = GTK_TEXT_BUFFER(arg);
+    int port_number = atoi(gtk_entry_get_text(GTK_ENTRY(port_entry)));
+
+    monitor_entire_network(buffer, label);
+    return NULL;
+}
+
 
 void * monitor_wrapper(void * arg)
 {

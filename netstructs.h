@@ -56,3 +56,12 @@ struct sniff_tcp {
     u_short th_sum;		/* checksum */
     u_short th_urp;		/* urgent pointer */
 };
+
+
+struct port_info {
+  char * src_address;
+  char * dest_address;
+  float packets_per_second;
+
+  u_char protocol;
+};
